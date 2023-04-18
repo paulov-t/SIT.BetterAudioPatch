@@ -22,7 +22,7 @@ namespace SIT.BetterAudioPatch.WeaponSoundPlayerPatches
         [PatchPrefix]
         public static bool PatchPrefix(
             WeaponSoundPlayer __instance,
-            Ammo ammo, Vector3 shotPosition, Vector3 shotDirection, float pitchMult, bool malfunctioned = false, bool multiShot = false, bool burstOf2Start = false
+            BulletClass ammo, Vector3 shotPosition, Vector3 shotDirection, float pitchMult, bool malfunctioned = false, bool multiShot = false, bool burstOf2Start = false
             )
         {
             return true;

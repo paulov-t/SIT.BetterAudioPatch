@@ -21,7 +21,7 @@ namespace SIT.BetterAudioPatch
         private void Awake()
         {
 
-            new PlayAtPointAudioClipPatch().Enable();
+            new PlayAtPointAudioClipPatch(Config).Enable();
             new PlayAtPointDistantPatch().Enable();
             new PlayAtPointSoundBankPatch().Enable();
             new PlayAtPointSoundBankSoundGroupPatch().Enable();

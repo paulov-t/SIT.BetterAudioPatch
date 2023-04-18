@@ -420,6 +420,14 @@
           }
         }
       },
+      "AnimationSystem.Types/0.0.0.0": {
+        "runtime": {
+          "AnimationSystem.Types.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
       "com.unity.multiplayer-hlapi.Runtime/1.0.0.0": {
         "runtime": {
           "com.unity.multiplayer-hlapi.Runtime.dll": {
@@ -781,6 +789,11 @@
       "sha512": ""
     },
     "UnityEngine.UI/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "AnimationSystem.Types/0.0.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""

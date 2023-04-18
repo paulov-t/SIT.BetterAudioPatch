@@ -1,4 +1,5 @@
-﻿using Comfort.Common;
+﻿using BepInEx.Configuration;
+using Comfort.Common;
 using EFT;
 using SIT;
 using SIT.BetterAudioPatch;
@@ -8,12 +9,24 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UIElements;
+using static BetterAudio;
+using static GClass1649;
 
 namespace SIT.SITBetterAudio
 {
     public class PlayAtPointAudioClipPatch : ModulePatch
     {
+        private static ConfigFile config;
+        private static bool m_EnableCustomEcho = false;
+
+        public PlayAtPointAudioClipPatch(ConfigFile _config)
+        {
+            config = _config;
+            m_EnableCustomEcho = config.Bind<bool>("Audio", "EnableCustomEcho", true).Value;
+        }
+
         public static IEnumerable<MethodInfo> GetPlayAtPointMethods()
         {
             return Plugin.GetTypeByName("BetterAudio")
@@ -33,14 +46,71 @@ namespace SIT.SITBetterAudio
             object __instance
             , Vector3 position
             , AudioClip clip
+            , float distance
+            , AudioSourceGroupType sourceGroup
+            , int rolloff
+            , float volume
+            , EOcclusionTest occlusionTest 
+            , AudioMixerGroup forceMixerGroup
+            , bool forceStereo
             , AudioListener ___audioListener_0
             )
         {
             AudioListener = ___audioListener_0;
 
-            //Logger.LogInfo("PlayAtPointAudioClipPatch played!");
+            // Play Audio as normal
             var audioSource = Singleton<GameWorld>.Instance.GetOrAddComponent<AudioSource>();
-            PlayAudioAtPoint(audioSource, position, clip);
+
+            if (m_EnableCustomEcho && Singleton<GameWorld>.Instance != null)
+            {
+                Singleton<GameWorld>.Instance.RegisteredPlayers.ForEach(x =>
+                {
+                    //if (x.IsYourPlayer) 
+                    {
+                        LayerMask highPolyWithTerrainMask = LayerMaskClass.HighPolyWithTerrainMask;
+                        float maxDistance = Vector3.Distance(x.Position, position);
+                        // direct line to you
+                        if (Physics.SphereCast(x.Position, 1, position, out var hitInfo, maxDistance, highPolyWithTerrainMask))
+                        {
+                            PlayAudioAtPoint(audioSource, position, clip, volume: volume);
+                        }
+                        else
+                        {
+                            PlayAudioAtPoint(audioSource, position, clip);
+                            if (!Physics.Linecast(x.Position + new Vector3(10, 0, 0), position, highPolyWithTerrainMask))
+                            {
+                                PlayAudioAtPoint(audioSource, x.Position + new Vector3(10, 0, 0), clip, 0.01f, volume * 0.5f, true);
+                            }
+                            if (!Physics.Linecast(x.Position + new Vector3(-10, 0, 0), position, highPolyWithTerrainMask))
+                            {
+                                PlayAudioAtPoint(audioSource, x.Position + new Vector3(-10, 0, 0), clip, 0.01f, volume * 0.5f, true);
+                            }
+                            if (!Physics.Linecast(x.Position + new Vector3(10, 10, 0), position, highPolyWithTerrainMask))
+                            {
+                                PlayAudioAtPoint(audioSource, x.Position + new Vector3(10, 10, 0), clip, 0.01f, volume * 0.5f, true);
+                            }
+                            if (!Physics.Linecast(x.Position + new Vector3(10, -10, 0), position, highPolyWithTerrainMask))
+                            {
+                                PlayAudioAtPoint(audioSource, x.Position + new Vector3(10, -10, 0), clip, 0.01f, volume * 0.5f, true);
+                            }
+                            if (!Physics.Linecast(x.Position + new Vector3(0, 10, 0), position, highPolyWithTerrainMask))
+                            {
+                                PlayAudioAtPoint(audioSource, x.Position + new Vector3(0, 10, 0), clip, 0.01f, volume * 0.5f, true);
+                            }
+                        }
+                    }
+                    //else
+                    //{
+                    //    PlayAudioAtPoint(audioSource, position, clip);
+                    //}
+
+                });
+            }
+            else
+            {
+                PlayAudioAtPoint(audioSource, position, clip, volume: volume);
+            }
+
 
             return false;
         }
