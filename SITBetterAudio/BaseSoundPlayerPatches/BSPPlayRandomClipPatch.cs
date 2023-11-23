@@ -3,6 +3,7 @@ using Comfort.Common;
 using EFT;
 using SIT.BetterAudioPatch;
 using SIT.SITBetterAudio;
+using StayInTarkov;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +17,7 @@ namespace SIT.BetterAudioPatch.BaseSoundPlayerPatches
     {
         protected override MethodBase GetTargetMethod()
         {
-            return Plugin.GetTypeByName("BaseSoundPlayer")
-                .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
-                .Single(x => x.Name == "PlayRandomClip");
+            return ReflectionHelpers.GetMethodForType(typeof(BaseSoundPlayer), "PlayRandomClip");
         }
 
         [PatchPrefix]
@@ -26,7 +25,10 @@ namespace SIT.BetterAudioPatch.BaseSoundPlayerPatches
             BaseSoundPlayer __instance,
             Player ___Player,
             BaseSoundPlayer.SoundElement soundElement,
-            GameObject ____weaponHierarchy)
+            GameObject ____weaponHierarchy,
+            BetterSource ____clipsSource
+
+            )
         {
             //Logger.LogInfo("BSPPlayRandomClipPatch played!");
 
@@ -43,7 +45,7 @@ namespace SIT.BetterAudioPatch.BaseSoundPlayerPatches
             //{
             //    return;
             //}
-            var clipSource = Plugin.GetTypeByName("BaseSoundPlayer").GetField("_clipsSource", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance) as BetterSource;
+            var clipSource = ____clipsSource;
             if (clipSource == null)
             {
                 clipSource = Singleton<BetterAudio>.Instance.GetSource(BetterAudio.AudioSourceGroupType.Weaponry, false);

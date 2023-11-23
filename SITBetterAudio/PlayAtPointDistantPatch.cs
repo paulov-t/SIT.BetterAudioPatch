@@ -1,5 +1,6 @@
 ﻿using SIT;
 using SIT.BetterAudioPatch;
+using StayInTarkov;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,7 @@ namespace SIT.SITBetterAudio
     {
         protected override MethodBase GetTargetMethod()
         {
-            return Plugin.GetTypeByName("BetterAudio")
-               .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-               .Single(x => x.Name == "PlayAtPointDistant");
+            return ReflectionHelpers.GetMethodForType(typeof(BetterAudio), "PlayAtPointDistant");
         }
 
         [PatchPrefix]

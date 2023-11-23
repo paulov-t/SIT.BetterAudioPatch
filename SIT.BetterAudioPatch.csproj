@@ -22,13 +22,18 @@
   
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\Tarkov.References\Assembly-CSharp.dll</HintPath>
+      <HintPath>References\Assembly-CSharp.dll</HintPath>
+		<Private>false</Private>
     </Reference>
     <Reference Include="Comfort">
-      <HintPath>..\Tarkov.References\Comfort.dll</HintPath>
-    </Reference>
+      <HintPath>References\Comfort.dll</HintPath>
+		<Private>false</Private>
+
+	</Reference>
     <Reference Include="Comfort.Unity">
-      <HintPath>..\Tarkov.References\Comfort.Unity.dll</HintPath>
-    </Reference>
+      <HintPath>References\Comfort.Unity.dll</HintPath>
+		<Private>false</Private>
+
+	</Reference>
   </ItemGroup>
 </Project>

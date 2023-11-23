@@ -13,10 +13,7 @@
           "BepInEx.Core": "5.4.21",
           "BepInEx.PluginInfoProps": "1.1.0",
           "NETStandard.Library": "2.0.3",
-          "UnityEngine.Modules": "2019.4.39",
-          "Assembly-CSharp": "0.0.0.0",
-          "Comfort": "1.0.0.4",
-          "Comfort.Unity": "1.0.0.4"
+          "UnityEngine.Modules": "2019.4.39"
         },
         "runtime": {
           "SIT.BetterAudioPatch.dll": {}
@@ -387,111 +384,7 @@
           "System.Runtime": "4.3.0"
         }
       },
-      "UnityEngine.Modules/2019.4.39": {},
-      "Assembly-CSharp/0.0.0.0": {
-        "runtime": {
-          "Assembly-CSharp.dll": {
-            "assemblyVersion": "0.0.0.0",
-            "fileVersion": "0.0.0.0"
-          }
-        }
-      },
-      "Comfort/1.0.0.4": {
-        "runtime": {
-          "Comfort.dll": {
-            "assemblyVersion": "1.0.0.4",
-            "fileVersion": "1.0.0.4"
-          }
-        }
-      },
-      "Comfort.Unity/1.0.0.4": {
-        "runtime": {
-          "Comfort.Unity.dll": {
-            "assemblyVersion": "1.0.0.4",
-            "fileVersion": "1.0.0.4"
-          }
-        }
-      },
-      "UnityEngine.UI/1.0.0.0": {
-        "runtime": {
-          "UnityEngine.UI.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
-      "AnimationSystem.Types/0.0.0.0": {
-        "runtime": {
-          "AnimationSystem.Types.dll": {
-            "assemblyVersion": "0.0.0.0",
-            "fileVersion": "0.0.0.0"
-          }
-        }
-      },
-      "com.unity.multiplayer-hlapi.Runtime/1.0.0.0": {
-        "runtime": {
-          "com.unity.multiplayer-hlapi.Runtime.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
-      "bsg.componentace.compression.libs.zlib/1.0.3.0": {
-        "runtime": {
-          "bsg.componentace.compression.libs.zlib.dll": {
-            "assemblyVersion": "1.0.3.0",
-            "fileVersion": "1.0.3.0"
-          }
-        }
-      },
-      "Sirenix.Utilities/1.0.0.0": {
-        "runtime": {
-          "Sirenix.Utilities.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
-      "DissonanceVoip/0.0.0.0": {
-        "runtime": {
-          "DissonanceVoip.dll": {
-            "assemblyVersion": "0.0.0.0",
-            "fileVersion": "0.0.0.0"
-          }
-        }
-      },
-      "FilesChecker/1.0.0.0": {
-        "runtime": {
-          "FilesChecker.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
-      "Sirenix.Serialization/1.0.0.0": {
-        "runtime": {
-          "Sirenix.Serialization.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
-      "Unity.ScriptableBuildPipeline/0.0.0.0": {
-        "runtime": {
-          "Unity.ScriptableBuildPipeline.dll": {
-            "assemblyVersion": "0.0.0.0",
-            "fileVersion": "0.0.0.0"
-          }
-        }
-      },
-      "Sirenix.Serialization.Config/1.0.0.0": {
-        "runtime": {
-          "Sirenix.Serialization.Config.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      }
+      "UnityEngine.Modules/2019.4.39": {}
     }
   },
   "libraries": {
@@ -772,71 +665,6 @@
       "sha512": "sha512-jQoF18d2iKP1TlS6ZfmaAjK6w2HXGiwYcKxkoM4X4DJw+soXgUldL2ehDHp8ApQG9AnG2I0cWqXwZ0Rw+R9gYw==",
       "path": "unityengine.modules/2019.4.39",
       "hashPath": "unityengine.modules.2019.4.39.nupkg.sha512"
-    },
-    "Assembly-CSharp/0.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "Comfort/1.0.0.4": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "Comfort.Unity/1.0.0.4": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "UnityEngine.UI/1.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "AnimationSystem.Types/0.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "com.unity.multiplayer-hlapi.Runtime/1.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "bsg.componentace.compression.libs.zlib/1.0.3.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "Sirenix.Utilities/1.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "DissonanceVoip/0.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "FilesChecker/1.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "Sirenix.Serialization/1.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "Unity.ScriptableBuildPipeline/0.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "Sirenix.Serialization.Config/1.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
     }
   }
 }

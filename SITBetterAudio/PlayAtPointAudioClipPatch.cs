@@ -3,6 +3,7 @@ using Comfort.Common;
 using EFT;
 using SIT;
 using SIT.BetterAudioPatch;
+using StayInTarkov;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UIElements;
 using static BetterAudio;
-using static GClass1649;
+using static UnityEngine.SendMouseEvents;
 
 namespace SIT.SITBetterAudio
 {
@@ -29,9 +30,7 @@ namespace SIT.SITBetterAudio
 
         public static IEnumerable<MethodInfo> GetPlayAtPointMethods()
         {
-            return Plugin.GetTypeByName("BetterAudio")
-                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(x => x.Name == "PlayAtPoint");
+            return ReflectionHelpers.GetAllMethodsForType(typeof(BetterAudio)).Where(x=>x.Name == "PlayAtPoint");
         }
 
         protected override MethodBase GetTargetMethod()
@@ -58,105 +57,64 @@ namespace SIT.SITBetterAudio
         {
             AudioListener = ___audioListener_0;
 
-            // Play Audio as normal
-            var audioSource = Singleton<GameWorld>.Instance.GetOrAddComponent<AudioSource>();
-
-            if (m_EnableCustomEcho && Singleton<GameWorld>.Instance != null)
-            {
-                Singleton<GameWorld>.Instance.RegisteredPlayers.ForEach(x =>
-                {
-                    //if (x.IsYourPlayer) 
-                    {
-                        LayerMask highPolyWithTerrainMask = LayerMaskClass.HighPolyWithTerrainMask;
-                        float maxDistance = Vector3.Distance(x.Position, position);
-                        // direct line to you
-                        if (Physics.SphereCast(x.Position, 1, position, out var hitInfo, maxDistance, highPolyWithTerrainMask))
-                        {
-                            PlayAudioAtPoint(audioSource, position, clip, volume: volume);
-                        }
-                        else
-                        {
-                            PlayAudioAtPoint(audioSource, position, clip);
-                            if (!Physics.Linecast(x.Position + new Vector3(10, 0, 0), position, highPolyWithTerrainMask))
-                            {
-                                PlayAudioAtPoint(audioSource, x.Position + new Vector3(10, 0, 0), clip, 0.01f, volume * 0.5f, true);
-                            }
-                            if (!Physics.Linecast(x.Position + new Vector3(-10, 0, 0), position, highPolyWithTerrainMask))
-                            {
-                                PlayAudioAtPoint(audioSource, x.Position + new Vector3(-10, 0, 0), clip, 0.01f, volume * 0.5f, true);
-                            }
-                            if (!Physics.Linecast(x.Position + new Vector3(10, 10, 0), position, highPolyWithTerrainMask))
-                            {
-                                PlayAudioAtPoint(audioSource, x.Position + new Vector3(10, 10, 0), clip, 0.01f, volume * 0.5f, true);
-                            }
-                            if (!Physics.Linecast(x.Position + new Vector3(10, -10, 0), position, highPolyWithTerrainMask))
-                            {
-                                PlayAudioAtPoint(audioSource, x.Position + new Vector3(10, -10, 0), clip, 0.01f, volume * 0.5f, true);
-                            }
-                            if (!Physics.Linecast(x.Position + new Vector3(0, 10, 0), position, highPolyWithTerrainMask))
-                            {
-                                PlayAudioAtPoint(audioSource, x.Position + new Vector3(0, 10, 0), clip, 0.01f, volume * 0.5f, true);
-                            }
-                        }
-                    }
-                    //else
-                    //{
-                    //    PlayAudioAtPoint(audioSource, position, clip);
-                    //}
-
-                });
-            }
-            else
-            {
-                PlayAudioAtPoint(audioSource, position, clip, volume: volume);
-            }
-
-
+            PlayAudioAtPoint(null, position, clip, volume: volume);
             return false;
         }
+
+        private static GameObject GOSource { get; set; }
 
         public static void PlayAudioAtPoint
             (AudioSource audioSource
             , Vector3 point
             , AudioClip clip
             , float pitchMult = 1f
-            , float volume = 0.15f
-            , bool playOneShot = true)
+            , float volume = 0.75f
+            , bool playOneShot = true
+            , bool gunshot = false)
         {
             if (audioSource == null)
             {
-                audioSource = Singleton<GameWorld>.Instance.GetOrAddComponent<AudioSource>();
-                audioSource.transform.position = point; 
+                GOSource = new GameObject("as-" + Guid.NewGuid());
+                audioSource = GOSource.GetOrAddComponent<AudioSource>();
             }
 
-            audioSource.transform.position = point;
             audioSource.clip = clip;
+            GOSource.transform.position = point;
+            audioSource.transform.position = point;
+
+            if (FPSCamera.Instance == null)
+                return;
+
+            if (FPSCamera.Instance.Camera == null)
+                return;
+
+            var cameraPosition = FPSCamera.Instance.Camera.transform.position;
+            var layermask = LayerMaskClass.HighPolyWithTerrainNoGrassMask | 30 | 31;
+            var vector = cameraPosition - point;
+            var blocked = false;
+            var blocked1 = false;
+            var blocked2 = false;
+            RaycastHit hitInfo;
+            blocked = (Physics.Raycast(new Ray(point, cameraPosition), out hitInfo, vector.magnitude, layermask));
+            blocked1 = (Physics.Raycast(new Ray(point, cameraPosition - FPSCamera.Instance.Camera.transform.right), out hitInfo, vector.magnitude, layermask));
+            blocked2 = (Physics.Raycast(new Ray(point, cameraPosition + FPSCamera.Instance.Camera.transform.right), out hitInfo, vector.magnitude, layermask));
+
             audioSource.dopplerLevel = 1f;
-            audioSource.loop = false;
-            audioSource.maxDistance = 50;
-            audioSource.minDistance = 2;
-            audioSource.pitch = 1f * pitchMult;
-            audioSource.priority = 1;
-            audioSource.reverbZoneMix = 1;
-            audioSource.rolloffMode = AudioRolloffMode.Linear;
-            audioSource.spatialBlend = 1;
-            audioSource.spread = 15;
-            audioSource.volume = volume;
-            if (playOneShot)
-                audioSource.PlayOneShot(clip, 1f);
-            else
-                audioSource.Play();
+            audioSource.outputAudioMixerGroup = Singleton<BetterAudio>.Instance.VeryStandartMixerGroup;
+            audioSource.loop = playOneShot ? false : true;
+            audioSource.maxDistance = gunshot ? 50 : 3;
+            audioSource.minDistance = gunshot ? 6 : 0.75f;
+            audioSource.pitch = (1.0f * pitchMult) - (float)(blocked ? 0.12f : 0) - (float)(blocked1 ? 0.12f : 0) - (float)(blocked2 ? 0.12f : 0);
+            audioSource.priority = 128;
+            audioSource.reverbZoneMix = 0.4f;
+            audioSource.rolloffMode = AudioRolloffMode.Logarithmic;
+            audioSource.spatialBlend = 1.0f;
+            audioSource.spread = 0.4f;
+            audioSource.volume = volume * (float)(Math.Max(0.75, Math.Min(1.0, Vector3.Distance(point, cameraPosition) > audioSource.maxDistance ? 0.9 : audioSource.maxDistance / Vector3.Distance(point, cameraPosition))));
+
+            audioSource.Play();
 
         }
 
-        public static void SetupAudioSource(ref AudioSource audioSource)
-        {
-            audioSource.dopplerLevel = 1f;
-            audioSource.priority = 1;
-            audioSource.reverbZoneMix = 1;
-            audioSource.rolloffMode = AudioRolloffMode.Linear;
-            audioSource.spatialBlend = 1;
-            audioSource.spread = 15;
-        }
     }
 }

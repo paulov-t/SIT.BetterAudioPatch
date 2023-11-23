@@ -1,5 +1,6 @@
 ﻿using EFT.NPC;
 using SIT.SITBetterAudio;
+using StayInTarkov;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +14,7 @@ namespace SIT.BetterAudioPatch.SITBetterAudio.NPCPlayerPatches
     {
         protected override MethodBase GetTargetMethod()
         {
-            return Plugin.GetTypeByName("NPCFootStepsSoundPlayer")
-                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Single(x => x.Name == "method_0");
+            return ReflectionHelpers.GetMethodForType(typeof(NPCFootStepsSoundPlayer), "method_0");
         }
 
         [PatchPrefix]
@@ -24,6 +23,7 @@ namespace SIT.BetterAudioPatch.SITBetterAudio.NPCPlayerPatches
             //, AudioSource ____stepAudioSource
             )
         {
+            Logger.LogInfo("NPCFootStepsSoundPlayerPatch:PatchPrefix");
             //___stepAudioSource.dopplerLevel = 1f;
             //___stepAudioSource.priority = 1;
             //___stepAudioSource.reverbZoneMix = 1;

@@ -1,4 +1,5 @@
 ﻿using SIT.SITBetterAudio;
+using StayInTarkov;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,7 @@ namespace SIT.BetterAudioPatch.WeaponSoundPlayerPatches
     {
         protected override MethodBase GetTargetMethod()
         {
-            return Plugin.GetTypeByName("WeaponSoundPlayer")
-                .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
-                .Single(x => x.Name == "EnableSourceOcclusion");
+            return ReflectionHelpers.GetMethodForType(typeof(WeaponSoundPlayer), "EnableSourceOcclusion");
         }
 
         [PatchPrefix]
