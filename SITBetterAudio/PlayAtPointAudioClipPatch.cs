@@ -102,8 +102,8 @@ namespace SIT.SITBetterAudio
             audioSource.dopplerLevel = 1f;
             audioSource.outputAudioMixerGroup = Singleton<BetterAudio>.Instance.VeryStandartMixerGroup;
             audioSource.loop = playOneShot ? false : true;
-            audioSource.maxDistance = gunshot ? 50 : 3;
-            audioSource.minDistance = gunshot ? 6 : 0.75f;
+            audioSource.maxDistance = gunshot ? 75 : 3;
+            audioSource.minDistance = gunshot ? 5 : 0.75f;
             audioSource.pitch = (1.0f * pitchMult) - (float)(blocked ? 0.12f : 0) - (float)(blocked1 ? 0.12f : 0) - (float)(blocked2 ? 0.12f : 0);
             audioSource.priority = 128;
             audioSource.reverbZoneMix = 0.4f;

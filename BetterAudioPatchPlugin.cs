@@ -3,6 +3,7 @@ using BepInEx.Logging;
 using EFT.NPC;
 using Mono.Cecil;
 using SIT.BetterAudioPatch.BaseSoundPlayerPatches;
+using SIT.BetterAudioPatch.SITBetterAudio;
 using SIT.BetterAudioPatch.SITBetterAudio.NPCPlayerPatches;
 using SIT.BetterAudioPatch.WeaponSoundPlayerPatches;
 using SIT.SITBetterAudio;
@@ -10,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using static GClass1657;
 
 namespace SIT.BetterAudioPatch
 {
@@ -21,6 +23,8 @@ namespace SIT.BetterAudioPatch
         private void Awake()
         {
 
+            new BetterSourceSpatializationMethodPatch().Enable();
+
             new PlayAtPointAudioClipPatch(Config).Enable();
             new PlayAtPointDistantPatch().Enable();
             new PlayAtPointSoundBankPatch().Enable();
@@ -29,9 +33,13 @@ namespace SIT.BetterAudioPatch
 
             //new BSPPlayRandomClipPatch().Enable();
             //new WSPEnableSourceOcclusionPatch().Enable();
-            new WSPFireBulletPatch().Enable();
 
-            new NPCFootStepsSoundPlayerPatch().Enable();
+            if (Config.Bind<bool>("Audio", "EnableFireBulletPatch", true).Value)
+                new WSPFireBulletPatch().Enable();
+
+            if (Config.Bind<bool>("Audio", "EnableTreeInteractivePatch", true).Value)
+                new TreeInteractivePatch().Enable();    
+
             // Plugin startup logic
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
             MainLogger = Logger;
