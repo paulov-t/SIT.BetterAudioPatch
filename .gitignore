@@ -8,8 +8,8 @@
 # Don't block this as its useful to keep track of the dlls
 # It is also useful for Pipeline work to generate releases from working builds
 # 
-# [Bb]in/
-# [Dd]ebug/
+[Bb]in/
+[Dd]ebug/
 
 # User-specific files
 *.rsuser
